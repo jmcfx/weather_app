@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:weather_app/controllers/config.dart';
+import 'package:weather_app/controllers/api/config.dart';
 import 'package:http/http.dart' as http;
 
 typedef TempUpdateCallback =  Function(Map<String,dynamic> temp);

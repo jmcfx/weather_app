@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/views/shared/style.dart';
 
 class MainCardContainer extends StatelessWidget {
- const  MainCardContainer({
+  const MainCardContainer({
     super.key,
-    required this.temperature, required this.icon,
+    required this.temperature,
+    required this.icon, required this.weatherCondition,
   });
-  final String temperature;
+  final String temperature, weatherCondition;
   final IconData icon;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,14 +35,14 @@ class MainCardContainer extends StatelessWidget {
                           fontSize: 32, fontWeight: FontWeight.bold),
                     ),
                     customSizedBox(),
-                     Icon(
+                    Icon(
                       icon,
                       size: 64,
                     ),
                     customSizedBox(),
-                    const Text(
-                      "Rain",
-                      style: TextStyle(
+                     Text(
+                      weatherCondition,
+                      style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w300,
                       ),

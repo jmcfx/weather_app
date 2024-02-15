@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/controllers/api_controller.dart';
+import 'package:weather_app/controllers/api/api_controller.dart';
 import 'package:weather_app/views/shared/main_screen_padding.dart';
 
 class MainScreen extends StatefulWidget {
@@ -59,12 +59,36 @@ class _MainScreenState extends State<MainScreen> {
             return Center(child: Text(snapshot.error.toString()));
           }
           final temp = snapshot.data!;
-          
+
+          final currentWeatherData = temp['list'][0];
+
           //Current Temperature from API...
-          final currentTemp = temp['list'][0]['main']['temp'].toString();
+          final currentTemp = currentWeatherData['main']['temp'].toString();
+          //Current Sky From API...
+          final currentSky = currentWeatherData['weather'][0]['main'];
+
+          //Weather Condition from API...
+          
+          
+
+          //Additional Information ....
+          final currentPressure =
+              currentWeatherData['main']['pressure'].toString();
+          final currentWindSpeed =
+              currentWeatherData['wind']['speed'].toString();
+          final currentHumidity =
+              currentWeatherData['main']['humidity'].toString();
 
           // Returns Main Screen UI if there isn't a snapshot Error....
-          return MainScreenUi(currentTemp: currentTemp);
+          return MainScreenUi(
+            currentTemp: currentTemp,
+            currentSky: currentSky,
+            currentPressure: currentPressure,
+            currentWindSpeed: currentWindSpeed,
+            currentHumidity: currentHumidity,
+            hourlyForecast: currentWeatherData.toString(),
+            hourlyTemperature: '',
+          );
         },
       ),
     );

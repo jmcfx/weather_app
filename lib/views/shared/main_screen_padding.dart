@@ -7,13 +7,25 @@ import 'package:weather_app/views/shared/style.dart';
 class MainScreenUi extends StatelessWidget {
   const MainScreenUi({
     super.key,
-   required this.currentTemp,
+    required this.currentTemp,
+    required this.currentSky,
+    required this.currentPressure,
+    required this.currentWindSpeed,
+    required this.currentHumidity,
+    required this.hourlyForecast,
+    required this.hourlyTemperature,
   });
-  final String currentTemp;
+  final String currentTemp,
+      currentSky,
+      currentPressure,
+      currentWindSpeed,
+      currentHumidity,
+      hourlyForecast,
+      hourlyTemperature;
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.all(15.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -21,8 +33,11 @@ class MainScreenUi extends StatelessWidget {
           children: [
             //Main card Container....
             MainCardContainer(
-              temperature: currentTemp,
-              icon: Icons.cloud,
+              temperature: "$currentTemp K",
+              icon: currentSky == 'Clouds' || currentSky == 'Rain'
+                  ? Icons.cloud
+                  : Icons.sunny,
+              weatherCondition: currentSky,
             ),
             const SizedBox(
               height: 20,
@@ -33,16 +48,18 @@ class MainScreenUi extends StatelessWidget {
             const SizedBox(
               height: 14,
             ),
-            //Weather forecast card...
-            const SingleChildScrollView(
-              //Hourly Forecast Item....
-              child: Row(
-                children: [
-                  HourlyForecastItem(
-                    time: "03:00",
-                    temperature: "03.00",
-                  ),
-                ],
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return const HourlyForecastItem(
+                    time: "",
+                    temperature: "",
+                    icon: Icons.cloud,
+                  );
+                },
               ),
             ),
             const SizedBox(
@@ -55,27 +72,29 @@ class MainScreenUi extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-
             //additional information item....
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AdditionalInfoItems(
                   icon: Icons.water_drop,
                   text: "Humidity",
-                  value: "91",
+                  value: currentHumidity,
                 ),
                 AdditionalInfoItems(
                   icon: Icons.air,
                   text: "Wind Speed",
-                  value: "7.5",
+                  value: currentWindSpeed,
                 ),
                 AdditionalInfoItems(
                   icon: Icons.beach_access,
                   text: "Pressure",
-                  value: "1000",
+                  value: currentPressure,
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 100,
             ),
           ],
         ),
