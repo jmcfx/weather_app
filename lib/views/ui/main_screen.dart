@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     try {
       await getCurrentWeather((updateTemp) {
         setState(() {
-          temp = updateTemp;
+        temp = updateTemp;
         });
       });
       return temp;
@@ -33,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -58,18 +59,13 @@ class _MainScreenState extends State<MainScreen> {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           }
-          final temp = snapshot.data!;
+          final data = snapshot.data!;
 
-          final currentWeatherData = temp['list'][0];
-
+          final currentWeatherData = data['list'][0];
           //Current Temperature from API...
           final currentTemp = currentWeatherData['main']['temp'].toString();
           //Current Sky From API...
           final currentSky = currentWeatherData['weather'][0]['main'];
-
-          //Weather Condition from API...
-          
-          
 
           //Additional Information ....
           final currentPressure =
@@ -81,13 +77,12 @@ class _MainScreenState extends State<MainScreen> {
 
           // Returns Main Screen UI if there isn't a snapshot Error....
           return MainScreenUi(
+            weatherFuture: data,
             currentTemp: currentTemp,
             currentSky: currentSky,
             currentPressure: currentPressure,
             currentWindSpeed: currentWindSpeed,
             currentHumidity: currentHumidity,
-            hourlyForecast: currentWeatherData.toString(),
-            hourlyTemperature: '',
           );
         },
       ),

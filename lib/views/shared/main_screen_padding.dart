@@ -1,27 +1,49 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:weather_app/views/shared/additional_info_item.dart';
 import 'package:weather_app/views/shared/hourly_forecast_item.dart';
 import 'package:weather_app/views/shared/main_card_container.dart';
 import 'package:weather_app/views/shared/style.dart';
 
-class MainScreenUi extends StatelessWidget {
+class MainScreenUi extends StatefulWidget {
   const MainScreenUi({
-    super.key,
+    Key? key,
+    required this.weatherFuture,
     required this.currentTemp,
     required this.currentSky,
     required this.currentPressure,
     required this.currentWindSpeed,
     required this.currentHumidity,
-    required this.hourlyForecast,
-    required this.hourlyTemperature,
-  });
+  }) : super(key: key);
+
+  final Map<String, dynamic> weatherFuture;
   final String currentTemp,
       currentSky,
       currentPressure,
       currentWindSpeed,
-      currentHumidity,
-      hourlyForecast,
-      hourlyTemperature;
+      currentHumidity;
+
+  @override
+  State<MainScreenUi> createState() => _MainScreenUiState();
+}
+
+class _MainScreenUiState extends State<MainScreenUi> {
+  late Map<String, dynamic> weatherData;
+  late String _currentTemp,
+      _currentSky,
+      _currentPressure,
+      _currentWindSpeed,
+      _currentHumidity;
+  @override
+  void initState() {
+    super.initState();
+    weatherData = widget.weatherFuture;
+    _currentTemp = widget.currentTemp;
+    _currentSky = widget.currentSky;
+    _currentPressure = widget.currentPressure;
+    _currentWindSpeed = widget.currentWindSpeed;
+    _currentHumidity = widget.currentHumidity;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,32 +55,38 @@ class MainScreenUi extends StatelessWidget {
           children: [
             //Main card Container....
             MainCardContainer(
-              temperature: "$currentTemp K",
-              icon: currentSky == 'Clouds' || currentSky == 'Rain'
+              temperature: "$_currentTemp k",
+              icon: _currentSky == 'Clouds' || _currentSky == 'Rain'
                   ? Icons.cloud
                   : Icons.sunny,
-              weatherCondition: currentSky,
+              weatherCondition: _currentSky,
             ),
             const SizedBox(
               height: 20,
             ),
             const SubHeaderContainer(
-              text: "Weather Condition",
+              text: "Hourly Weather Forecast",
             ),
             const SizedBox(
-              height: 14,
+              height: 16,
             ),
             SizedBox(
-              height: 120,
+              height: 130,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
                 itemBuilder: (context, index) {
-                  return const HourlyForecastItem(
-                    time: "",
-                    temperature: "",
-                    icon: Icons.cloud,
-                  );
+                  final hourlyForecast = weatherData['list'][index + 1];
+                  final hourlySky =
+                      weatherData['list'][index + 1]['weather'][0]['main'];
+                  final hourlyTemp = hourlyForecast['main']['temp'].toString();
+                  final time = hourlyForecast['dt_txt'].toString();
+                  return HourlyForecastItem(
+                      time: time,
+                      temperature: hourlyTemp,
+                      icon: hourlySky == 'Clouds' || hourlySky == "Rain"
+                          ? Icons.cloud
+                          : Icons.sunny);
                 },
               ),
             ),
@@ -70,7 +98,7 @@ class MainScreenUi extends StatelessWidget {
               text: "Additional Information ",
             ),
             const SizedBox(
-              height: 10,
+              height: 15,
             ),
             //additional information item....
             Row(
@@ -79,17 +107,17 @@ class MainScreenUi extends StatelessWidget {
                 AdditionalInfoItems(
                   icon: Icons.water_drop,
                   text: "Humidity",
-                  value: currentHumidity,
+                  value: _currentHumidity,
                 ),
                 AdditionalInfoItems(
                   icon: Icons.air,
                   text: "Wind Speed",
-                  value: currentWindSpeed,
+                  value: _currentWindSpeed,
                 ),
                 AdditionalInfoItems(
                   icon: Icons.beach_access,
                   text: "Pressure",
-                  value: currentPressure,
+                  value: _currentPressure,
                 ),
               ],
             ),
