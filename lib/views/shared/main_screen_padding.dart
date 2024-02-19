@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app/views/shared/additional_info_item.dart';
 import 'package:weather_app/views/shared/hourly_forecast_item.dart';
 import 'package:weather_app/views/shared/main_card_container.dart';
 import 'package:weather_app/views/shared/style.dart';
+
+
 
 class MainScreenUi extends StatefulWidget {
   const MainScreenUi({
@@ -52,6 +55,7 @@ class _MainScreenUiState extends State<MainScreenUi> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Main card Container....
             MainCardContainer(
@@ -70,6 +74,7 @@ class _MainScreenUiState extends State<MainScreenUi> {
             const SizedBox(
               height: 16,
             ),
+            //Hourly Forecast List Items ....
             SizedBox(
               height: 130,
               child: ListView.builder(
@@ -80,9 +85,9 @@ class _MainScreenUiState extends State<MainScreenUi> {
                   final hourlySky =
                       weatherData['list'][index + 1]['weather'][0]['main'];
                   final hourlyTemp = hourlyForecast['main']['temp'].toString();
-                  final time = hourlyForecast['dt_txt'].toString();
+                  final time = DateTime.parse(hourlyForecast['dt_txt']);
                   return HourlyForecastItem(
-                      time: time,
+                      time:DateFormat.j().format(time),
                       temperature: hourlyTemp,
                       icon: hourlySky == 'Clouds' || hourlySky == "Rain"
                           ? Icons.cloud

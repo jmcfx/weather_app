@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     try {
       await getCurrentWeather((updateTemp) {
         setState(() {
-        temp = updateTemp;
+          temp = updateTemp;
         });
       });
       return temp;
@@ -33,7 +33,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -43,7 +42,11 @@ class _MainScreenState extends State<MainScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                _weatherFuture = fetchWeatherAndUpdateUI();
+              });
+            },
             icon: const Icon(Icons.refresh),
           )
         ],
